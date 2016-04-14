@@ -2,16 +2,11 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
-import DevTools from '../containers/DevTools'
 
 export default function configureStore(initialState) {
   const store = createStore(
     rootReducer,
-    compose(
-      applyMiddleware(thunk, createLogger()),
-      DevTools(),
-      window.devToolsExtension ? window.devToolsExtension() : f => f
-    )
+    applyMiddleware(thunk, createLogger())
   )
 
   if (module.hot) {

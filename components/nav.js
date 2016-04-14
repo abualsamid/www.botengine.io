@@ -68,7 +68,6 @@ Nav.defaultProps = {
   email: ""
 }
 function mapStateToProps(state, ownProps) {
-  console.log("mapStateToProps in nav just got called. ", state, ownProps)
   return {
     isLoggedIn: state.login.isLoggedIn,
     email: state.login.email,

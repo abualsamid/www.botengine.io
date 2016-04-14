@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import GoogleLogin from 'react-google-login'
 import { triggerLogin } from '../actions'
-import API_ROOT from '../middleware/botengine'
+import { API_ROOT } from '../middleware/botengine'
 import { successfulLogin, failedLogin } from '../actions'
 
 import * as actionCreators from '../actions'
@@ -11,7 +11,7 @@ import * as actionCreators from '../actions'
 
 
 function responseGoogle(googleUser) {
-  console.log('response from google: ', googleUser);
+  // console.log('response from google: ', googleUser);
 
 
   // if (authResult['code']) {
@@ -43,7 +43,7 @@ class LoginPage extends Component {
     super(props);
     this.gooleResponse = this.gooleResponse.bind(this)
     this.processLogin = this.processLogin.bind(this)
-
+    this.renderLoginOptions = this.renderLoginOptions.bind(this)
   }
 
   componentWillMount() {
@@ -66,11 +66,11 @@ class LoginPage extends Component {
   processLogin(profile) {
 
     console.log("In process login ...\n ");
-    const { successfulLogin, failedLogin } = this.props
-
+    const { successfulLogin, failedLogin, history } = this.props
+    const { router } = this.context
     try {
-      console.log(JSON.stringify(profile));
-      fetch("http://localhost:5000/" + "token-auth", {
+      // console.log(JSON.stringify(profile));
+      fetch(API_ROOT  + "token-auth", {
         headers: {
          'Accept': 'application/json',
          'Content-Type': 'application/json'
@@ -82,10 +82,13 @@ class LoginPage extends Component {
         return res.json();
       })
       .then(function(token) {
+        localStorage.setItem('token',token.token)
         console.log("Going to dispatch ... ", JSON.stringify(token))
-        successfulLogin(token, profile)
+        successfulLogin(token.token, profile)
+        router.push('/Dashboard');
       })
       .catch(function(err) {
+        console.log("Error in process login:", err)
         failedLogin()
       })
     } catch(x) {
@@ -94,7 +97,6 @@ class LoginPage extends Component {
   }
 
   gooleResponse(googleUser) {
-    const { dispatch } = this.props
 
     console.log("test me...")
     try {
@@ -121,22 +123,42 @@ class LoginPage extends Component {
       console.log(x);
     }
   }
+  renderLoginOptions() {
+    const { isLoggedIn, email } = this.props
+    if (isLoggedIn) {
+      return (
+        <div>
+          You are authenticated as { email }
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <GoogleLogin
+            clientId="789684712804-nr7p56u4grev55ct6lkujc7ih3pfpmeq.apps.googleusercontent.com"
+            callback={this.gooleResponse} />
+
+        </div>
+      )
+    }
+  }
   render() {
     return (
       <div className="container text-center">
-      <GoogleLogin
-        clientId="789684712804-nr7p56u4grev55ct6lkujc7ih3pfpmeq.apps.googleusercontent.com"
-        callback={this.gooleResponse} />
+        {this.renderLoginOptions()}
       </div>
     )
   }
 }
 
-
+LoginPage.contextTypes = {
+  router: React.PropTypes.object.isRequired
+}
 export default connect(
   (state, ownProps) => (
     {
-      email: state.email
+      email: state.login.email,
+      isLoggedIn: state.login.isLoggedIn
     }
   ),
   actionCreators

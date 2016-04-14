@@ -4,9 +4,9 @@
   "description": "botengine website",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=development node server.js",
-    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js --progress --colors -p",
-    "serve": "cross-env NODE_ENV=production node server.js",
+    "start": "env NODE_ENV=development node server.js",
+    "build": "env NODE_ENV=production webpack --config webpack.config.js --progress --colors -p",
+    "serve": "env NODE_ENV=production node server.js",
     "deploy": "npm run build && cd public && aws --profile=abualsamid --region us-west-2 s3 sync . s3://botengine.io --exclude '.git' --exclude '.DS_Store' --exclude  'g' --exclude '.gitignore'"
   },
   "repository": {

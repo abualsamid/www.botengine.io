@@ -1,5 +1,4 @@
 import 'whatwg-fetch'
-const GATEWAY_ROOT = "http://localhost:5000/"
 
 // pets
 export const REQUEST_PETS = 'REQUEST_PETS'
@@ -7,6 +6,7 @@ export const RECEIVED_PETS = 'RECEIVED_PETS'
 export const FAILED_PETS = 'FAILED_PETS'
 export const SUCCESS_LOGIN = 'SUCCESS_LOGIN'
 export const FAILED_LOGIN = 'FAILED_LOGIN'
+export const LOGOUT = "LOGOUT"
 
 function requestPets() {
   return {
@@ -40,9 +40,26 @@ export function successfulLogin(token, profile) {
       token: token,
       profile: profile,
       receivedAt: Date.now()
-    }  
+    }
   } catch(x) {
     console.log("in successfulLogin: ", x )
+  }
+
+}
+
+export function logout() {
+  console.log('signing off folks')
+  try {
+    return {
+      type: LOGOUT,
+      token: "",
+      profile: {},
+      email: "",
+      isLoggedIn: false,
+      receivedAt: Date.now()
+    }
+  } catch(x) {
+    console.log("in logout: ", x)
   }
 
 }

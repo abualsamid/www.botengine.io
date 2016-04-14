@@ -56,6 +56,9 @@ function login(state = { isLoggedIn: false, email: "", token: ""}, action) {
       let g =  Object.assign({}, state, { isLoggedIn: true, email: action.profile.email, token: action.token })
       console.log("reducing state to ", g );
       return g
+    case ActionTypes.LOGOUT:
+      console.log("reducing lotout");
+      return Object.assign({}, state, {isLoggedIn: false, email: "", token: "", profile:{}})
     default:
       return state;
   }

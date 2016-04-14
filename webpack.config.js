@@ -48,7 +48,7 @@ var plugins= [
   new ExtractTextPlugin("css/style.css?[contenthash]"),
   new webpack.DefinePlugin({
     "process.env": {
-      NODE_ENV: JSON.stringify("production")
+      NODE_ENV: JSON.stringify(nodeEnv)
     }
   }),
   new CopyWebpackPlugin([{from: 'static'}])
