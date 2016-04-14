@@ -5,6 +5,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var CleanWebpackPlugin=require("clean-webpack-plugin");
 var nodeEnv = process.env.NODE_ENV || 'development';
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
 var plugins= [
@@ -49,7 +50,8 @@ var plugins= [
     "process.env": {
       NODE_ENV: JSON.stringify("production")
     }
-  })
+  }),
+  new CopyWebpackPlugin([{from: 'static'}])
 
 ];
 if (nodeEnv=="production") {

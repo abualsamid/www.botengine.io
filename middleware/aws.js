@@ -17,24 +17,44 @@ function getNextPageUrl(response) {
 
 const GATEWAY_ROOT = "https://hh61e19vvk.execute-api.us-west-2.amazonaws.com/test/pets"
 
+// function callApi(endpoint) {
+//   const fullUrl = (endpoint.indexOf(GATEWAY_ROOT) === -1) ? GATEWAY_ROOT + endpoint : endpoint
+//
+//   return fetch(fullUrl)
+//     .then(response =>
+//       response.json().then(json => ({ json, response }))
+//     ).then(({ json, response }) => {
+//       if (!response.ok) {
+//         return Promise.reject(json)
+//       }
+//
+//       const nextPageUrl = getNextPageUrl(response)
+//
+//       return Object.assign({},
+//         json,
+//         { nextPageUrl }
+//       )
+//     })
+// }
+
 function callApi(endpoint) {
   const fullUrl = (endpoint.indexOf(GATEWAY_ROOT) === -1) ? GATEWAY_ROOT + endpoint : endpoint
 
-  return fetch(fullUrl)
-    .then(response =>
-      response.json().then(json => ({ json, response }))
-    ).then(({ json, response }) => {
-      if (!response.ok) {
-        return Promise.reject(json)
-      }
+  window.apigClient = window.apigClient || apigClientFactory.newClient();
+  var params= {};
+  var body = {};
+  var additionalParams = {};
 
-      const nextPageUrl = getNextPageUrl(response)
+      window.apigClient.petsGet(params, body, additionalParams)
+      .then(function(result){
+          console.log('from api gateway: ', result);
+          return result;
+      }).catch( function(result){
+        console.log('error in api gateway call: ', result);
+        //This is where you would put an error callback
+      });
 
-      return Object.assign({},
-        json,
-        { nextPageUrl }
-      )
-    })
+
 }
 
 

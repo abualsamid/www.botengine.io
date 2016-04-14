@@ -49,6 +49,17 @@ function pets(state = { isFetching: false,
   }
 }
 
+function login(state = { isLoggedIn: false, email: "", token: ""}, action) {
+
+  switch(action.type) {
+    case ActionTypes.SUCCESS_LOGIN:
+      let g =  Object.assign({}, state, { isLoggedIn: true, email: action.profile.email, token: action.token })
+      console.log("reducing state to ", g );
+      return g
+    default:
+      return state;
+  }
+}
 // Updates error message to notify about the failed fetches.
 function errorMessage(state = null, action) {
   const { type, error } = action
@@ -66,7 +77,7 @@ function errorMessage(state = null, action) {
 const rootReducer = combineReducers({
   errorMessage,
   routing,
-  pets
+  login
 })
 
 export default rootReducer

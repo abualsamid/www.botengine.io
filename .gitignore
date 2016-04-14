@@ -2,4 +2,6 @@ g
 .DS_Store
 public/
 node_modules
+.env
+test
 

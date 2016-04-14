@@ -1,0 +1,14 @@
+{
+  "name": "authorize",
+  "version": "1.0.0",
+  "description": "",
+  "main": "authorize.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "Unlicense",
+  "dependencies": {
+    "njwt": "^0.2.3"
+  }
+}

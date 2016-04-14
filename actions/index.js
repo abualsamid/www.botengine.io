@@ -1,11 +1,12 @@
 import 'whatwg-fetch'
-const GATEWAY_ROOT = "https://hh61e19vvk.execute-api.us-west-2.amazonaws.com/test/pets"
+const GATEWAY_ROOT = "http://localhost:5000/"
 
 // pets
 export const REQUEST_PETS = 'REQUEST_PETS'
 export const RECEIVED_PETS = 'RECEIVED_PETS'
 export const FAILED_PETS = 'FAILED_PETS'
-
+export const SUCCESS_LOGIN = 'SUCCESS_LOGIN'
+export const FAILED_LOGIN = 'FAILED_LOGIN'
 
 function requestPets() {
   return {
@@ -29,6 +30,29 @@ function failedPets() {
   }
 }
 
+
+export function successfulLogin(token, profile) {
+
+  console.log('in successfulLogin , token is: ', token)
+  try {
+    return {
+      type: SUCCESS_LOGIN,
+      token: token,
+      profile: profile,
+      receivedAt: Date.now()
+    }  
+  } catch(x) {
+    console.log("in successfulLogin: ", x )
+  }
+
+}
+
+export function failedLogin() {
+  return {
+    type: FAILED_LOGIN
+  }
+}
+
 export function fetchPets(endpoint="") {
   const fullUrl = endpoint === "" ? GATEWAY_ROOT : GATEWAY_ROOT +'/' + endpoint
   console.log('fetching...');
@@ -43,22 +67,48 @@ export function fetchPets(endpoint="") {
     // In this case, we return a promise to wait for.
     // This is not required by thunk middleware, but it is convenient for us.
     console.log('calling out to ', fullUrl)
-    return fetch(fullUrl)
-      .then(response =>response.json().then(json => ({json,response})))
-      .then( ({json,response}) => {
-        if (!response.ok) {
-          console.log('failed on network fetch ', response.statusText);
-          return dispatch(failedPets(response.statusText))
-        }
-        console.log('received json ', json)
-        dispatch(receivedPets(json))
-      })
-      .catch( (err) => {
-        console.log('Network error on request: ', err);
+
+    window.apigClient = window.apigClient || apigClientFactory.newClient();
+    var params= {};
+    var body = {};
+    var additionalParams = {};
+
+    return window.apigClient.petsGet(params, body, additionalParams)
+      .then(function(result){
+          console.log('from api gateway: ', result);
+          if (!result) {
+            console.log("failed on network.");
+            return dispatch(failedPets("network down!"))
+          }
+          if (result.status!==200) {
+            console.log("failed on network call: ", result.statusText);
+            return dispatch(failedPets(result.statusText))
+          }
+          return dispatch(receivedPets(result.data))
+      }).catch( function(result){
+        console.log('error in api gateway call: ', result);
         dispatch(failedPets("wtf?"))
         // Let the calling code know there's nothing to wait for.
         return Promise.resolve()
-      })
+
+      });
+
+    // return fetch(fullUrl)
+    //   .then(response =>response.json().then(json => ({json,response})))
+    //   .then( ({json,response}) => {
+    //     if (!response.ok) {
+    //       console.log('failed on network fetch ', response.statusText);
+    //       return dispatch(failedPets(response.statusText))
+    //     }
+    //     console.log('received json ', json)
+    //     dispatch(receivedPets(json))
+    //   })
+    //   .catch( (err) => {
+    //     console.log('Network error on request: ', err);
+    //     dispatch(failedPets("wtf?"))
+    //     // Let the calling code know there's nothing to wait for.
+    //     return Promise.resolve()
+    //   })
   }
 }
 
@@ -111,5 +161,13 @@ export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE'
 export function resetErrorMessage() {
   return {
     type: RESET_ERROR_MESSAGE
+  }
+}
+
+export function triggerLogin(email) {
+  return {
+    type: SUCCESS_LOGIN ,
+    email: email,
+    isLoggedIn: true
   }
 }

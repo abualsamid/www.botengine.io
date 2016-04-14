@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import Explore from '../components/Explore'
-import Home from '../components/home'
 import Nav from '../components/nav'
 import { resetErrorMessage } from '../actions'
 
@@ -41,6 +40,8 @@ class App extends Component {
   }
 
   render() {
+    var year = new Date().getFullYear() || 2015 
+
     const { children, inputValue } = this.props
     return (
       <div>
@@ -49,7 +50,7 @@ class App extends Component {
         {children}
 
         <footer className="text-center">
-          <span className="fa fa-copyright"></span> 2016. botengine.io All Rights Reserved.
+          <span className="fa fa-copyright"></span> {year}. botengine.io All Rights Reserved.
         </footer>
 
       </div>

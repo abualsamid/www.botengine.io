@@ -1,0 +1,22 @@
+{
+  "name": "login",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "Unlicense",
+  "dependencies": {
+    "bluebird": "^3.3.4",
+    "botengine-authenticate": "file:../lib/authenticate",
+    "botengine-token": "file:///Users/abualsamid/Dropbox/src/github.com/abualsamid/www.botengine.io/lambda/lib/token",
+    "botengine-user": "file:///Users/abualsamid/Dropbox/src/github.com/abualsamid/www.botengine.io/lambda/lib/user",
+    "dotenv": "^2.0.0",
+    "njwt": "^0.2.3"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.3.2"
+  }
+}

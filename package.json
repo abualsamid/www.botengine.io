@@ -7,7 +7,7 @@
     "start": "cross-env NODE_ENV=development node server.js",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.js --progress --colors -p",
     "serve": "cross-env NODE_ENV=production node server.js",
-    "deploy": "npm run build && cd public && aws --profile=abualsamid --region us-west-2 s3 sync . s3://botengine.io --exclude '.git' --exclude '.DS_Store' --exclude   'g' --exclude '.gitignore'"
+    "deploy": "npm run build && cd public && aws --profile=abualsamid --region us-west-2 s3 sync . s3://botengine.io --exclude '.git' --exclude '.DS_Store' --exclude  'g' --exclude '.gitignore'"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     "babel-preset-react-hmre": "^1.1.1",
     "clean-webpack-plugin": "^0.1.8",
     "concurrently": "^2.0.0",
+    "copy-webpack-plugin": "^1.1.1",
     "css-loader": "^0.23.1",
     "express": "^4.13.4",
     "extract-text-webpack-plugin": "^1.0.1",
@@ -71,9 +72,11 @@
     "immutable": "^3.7.6",
     "imports-loader": "^0.6.5",
     "lodash": "^4.7.0",
+    "njwt": "^0.2.3",
     "normalizr": "^2.0.1",
     "react": "^0.14.8",
     "react-dom": "^0.14.8",
+    "react-google-login": "^1.0.6",
     "react-redux": "^4.4.1",
     "react-router": "^2.0.1",
     "react-router-redux": "^4.0.1",

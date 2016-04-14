@@ -1,7 +1,37 @@
 import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
-export default class Nav extends Component {
+class Nav extends Component {
+  constructor(props) {
+    super(props)
+  }
+
+  renderLoginSnippet() {
+    const { isLoggedIn, email }  = this.props
+    if(isLoggedIn) {
+      return (
+        <ul className="nav navbar-nav navbar-right">
+                <li>
+                  <Link to="/logout">Log Out {email}</Link>
+                </li>
+              </ul>
+
+      )
+    } else {
+      return (
+        <ul className="nav navbar-nav navbar-right">
+          <li>
+            <Link to="/signup">Sign Up</Link>
+          </li>
+          <li>
+            <Link to="/login">Log In</Link>
+          </li>
+        </ul>
+
+      )
+    }
+  }
   render() {
     return (
       <nav className="navbar navbar-default navbar-fixed-top">
@@ -22,28 +52,29 @@ export default class Nav extends Component {
               </li>
               <li><a href="#about">About</a></li>
               <li><a href="#contact">Contact</a></li>
-              <Link to='/pets'  className="navbar-brand">Pets</Link>
-              <li className="dropdown">
-                <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span className="caret"></span></a>
-                <ul className="dropdown-menu">
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li role="separator" className="divider"></li>
-                  <li className="dropdown-header">Nav header</li>
-                  <li><a href="#">Separated link</a></li>
-                  <li><a href="#">One more separated link</a></li>
-                </ul>
-              </li>
+
+
             </ul>
-            <ul className="nav navbar-nav navbar-right">
-              <li><a href="../navbar/">Default</a></li>
-              <li><a href="../navbar-static-top/">Static top</a></li>
-              <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li>
-            </ul>
+            {this.renderLoginSnippet()}
           </div>
         </div>
       </nav>
     )
   }
 }
+
+Nav.defaultProps = {
+  isLoggedIn: false,
+  email: ""
+}
+function mapStateToProps(state, ownProps) {
+  console.log("mapStateToProps in nav just got called. ", state, ownProps)
+  return {
+    isLoggedIn: state.login.isLoggedIn,
+    email: state.login.email,
+  }
+}
+
+export default connect(mapStateToProps, {
+
+})(Nav)
